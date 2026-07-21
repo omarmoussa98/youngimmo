@@ -12,11 +12,11 @@ export const Route = createFileRoute("/")({
         content:
           "Trouve un logement étudiant vérifié à Dakar en 3 clics. Annonces vérifiées sur le terrain, prix affichés, contact proprio direct. Zéro commission.",
       },
-      { property: "og:title", content: "YoungImmo — Logements étudiants vérifiés à Dakar" },
+      { property: "og:title", content: "YoungImmo — Ton appart vérifié près du campus à Dakar" },
       {
         property: "og:description",
         content:
-          "Annonces vérifiées sur le terrain. Prix affichés. Proprio direct. Zéro commission.",
+          "Trouve un logement étudiant vérifié à Dakar en 3 clics. Annonces vérifiées sur le terrain, prix affichés, contact proprio direct. Zéro commission.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
