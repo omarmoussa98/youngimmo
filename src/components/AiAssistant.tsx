@@ -41,13 +41,12 @@ export function AiAssistant() {
 
       if (!res.ok) throw new Error("http_" + res.status);
       const json = await res.json();
-      const outputs = json?.data?.outputs;
+      const rawOutput = json?.data?.outputs;
       const text =
-        typeof outputs === "string"
-          ? outputs
-          : outputs
-            ? JSON.stringify(outputs, null, 2)
-            : "Aucun résultat.";
+        rawOutput?.text ||
+        (typeof rawOutput === "string" ? rawOutput : "") ||
+        json?.data?.answer ||
+        "Aucune réponse reçue.";
       setResult(text);
       setStatus("success");
     } catch (err: unknown) {
