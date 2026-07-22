@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { YiHeader } from "@/components/YiHeader";
 import { YiFooter } from "@/components/YiFooter";
 import { listings, formatFcfa, type Listing } from "@/data/listings";
+import { AiAssistant } from "@/components/AiAssistant";
 
 export const Route = createFileRoute("/logements")({
   head: () => ({
