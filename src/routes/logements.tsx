@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { YiHeader } from "@/components/YiHeader";
 import { YiFooter } from "@/components/YiFooter";
 import { listings, formatFcfa, type Listing } from "@/data/listings";
+import { AiAssistant } from "@/components/AiAssistant";
 
 export const Route = createFileRoute("/logements")({
   head: () => ({
@@ -93,14 +94,8 @@ function LogementsPage() {
           )}
         </div>
 
-        <div className="mt-12 rounded-2xl bg-gradient-to-r from-primary to-accent p-6 sm:p-8 text-center text-white shadow-xl">
-          <p className="text-lg font-semibold">
-            Tu ne trouves pas ton bonheur ? Parle à notre assistant IA 🤖
-          </p>
-          <button className="btn-hover mt-4 inline-flex rounded-xl bg-white text-primary px-6 py-3 font-semibold hover:scale-[1.03]">
-            Ouvrir l'assistant IA
-          </button>
-        </div>
+        <AiAssistant />
+
       </main>
       <YiFooter />
     </div>
