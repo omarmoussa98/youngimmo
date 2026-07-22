@@ -41,13 +41,12 @@ export function AiAssistant() {
 
       if (!res.ok) throw new Error("http_" + res.status);
       const json = await res.json();
-      const outputs = json?.data?.outputs;
+      const rawOutput = json?.data?.outputs;
       const text =
-        typeof outputs === "string"
-          ? outputs
-          : outputs
-            ? JSON.stringify(outputs, null, 2)
-            : "Aucun résultat.";
+        rawOutput?.text ||
+        (typeof rawOutput === "string" ? rawOutput : "") ||
+        json?.data?.answer ||
+        "Aucune réponse reçue.";
       setResult(text);
       setStatus("success");
     } catch (err: unknown) {
@@ -108,9 +107,21 @@ export function AiAssistant() {
         )}
 
         {status === "success" && result && (
-          <pre className="mt-6 rounded-xl bg-[#F8FAFC] border border-border/60 p-4 sm:p-5 text-sm text-foreground font-mono whitespace-pre-wrap break-words overflow-x-auto fade-up">
+          <div
+            className="mt-6 text-sm text-foreground break-words fade-up"
+            style={{
+              whiteSpace: "pre-wrap",
+              fontFamily: "monospace",
+              background: "#FFFFFF",
+              borderRadius: "12px",
+              padding: "20px",
+              border: "1px solid #E2E8F0",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              lineHeight: "1.6",
+            }}
+          >
             {result}
-          </pre>
+          </div>
         )}
       </div>
     </section>
