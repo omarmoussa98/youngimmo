@@ -60,6 +60,9 @@ export function YiHeader() {
           <Link to="/logements" className={desktopLink} activeProps={desktopActive}>
             Logements
           </Link>
+          <Link to="/saisie-terrain" className={desktopLink} activeProps={desktopActive}>
+            Saisie Terrain
+          </Link>
           <Link to="/contact" className={desktopLink} activeProps={desktopActive}>
             Contact
           </Link>
@@ -113,6 +116,9 @@ export function YiHeader() {
           </Link>
           <Link to="/logements" className={mobileLink} activeProps={mobileActive} onClick={close}>
             <span aria-hidden>🔑</span> Logements
+          </Link>
+          <Link to="/saisie-terrain" className={mobileLink} activeProps={mobileActive} onClick={close}>
+            <span aria-hidden>🔍</span> Saisie Terrain
           </Link>
           <Link to="/contact" className={mobileLink} activeProps={mobileActive} onClick={close}>
             <span aria-hidden>💬</span> Contact
