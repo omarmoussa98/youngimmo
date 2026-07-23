@@ -9,17 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SaisieTerrainRouteImport } from './routes/saisie-terrain'
 import { Route as SaisiePrixLoyerRouteImport } from './routes/saisie-prix-loyer'
 import { Route as LogementsRouteImport } from './routes/logements'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 
-const SaisieTerrainRoute = SaisieTerrainRouteImport.update({
-  id: '/saisie-terrain',
-  path: '/saisie-terrain',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SaisiePrixLoyerRoute = SaisiePrixLoyerRouteImport.update({
   id: '/saisie-prix-loyer',
   path: '/saisie-prix-loyer',
@@ -46,14 +40,12 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/logements': typeof LogementsRoute
   '/saisie-prix-loyer': typeof SaisiePrixLoyerRoute
-  '/saisie-terrain': typeof SaisieTerrainRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/logements': typeof LogementsRoute
   '/saisie-prix-loyer': typeof SaisiePrixLoyerRoute
-  '/saisie-terrain': typeof SaisieTerrainRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,25 +53,13 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/logements': typeof LogementsRoute
   '/saisie-prix-loyer': typeof SaisiePrixLoyerRoute
-  '/saisie-terrain': typeof SaisieTerrainRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/contact'
-    | '/logements'
-    | '/saisie-prix-loyer'
-    | '/saisie-terrain'
+  fullPaths: '/' | '/contact' | '/logements' | '/saisie-prix-loyer'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/logements' | '/saisie-prix-loyer' | '/saisie-terrain'
-  id:
-    | '__root__'
-    | '/'
-    | '/contact'
-    | '/logements'
-    | '/saisie-prix-loyer'
-    | '/saisie-terrain'
+  to: '/' | '/contact' | '/logements' | '/saisie-prix-loyer'
+  id: '__root__' | '/' | '/contact' | '/logements' | '/saisie-prix-loyer'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -87,18 +67,10 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   LogementsRoute: typeof LogementsRoute
   SaisiePrixLoyerRoute: typeof SaisiePrixLoyerRoute
-  SaisieTerrainRoute: typeof SaisieTerrainRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/saisie-terrain': {
-      id: '/saisie-terrain'
-      path: '/saisie-terrain'
-      fullPath: '/saisie-terrain'
-      preLoaderRoute: typeof SaisieTerrainRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/saisie-prix-loyer': {
       id: '/saisie-prix-loyer'
       path: '/saisie-prix-loyer'
@@ -135,7 +107,6 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   LogementsRoute: LogementsRoute,
   SaisiePrixLoyerRoute: SaisiePrixLoyerRoute,
-  SaisieTerrainRoute: SaisieTerrainRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
