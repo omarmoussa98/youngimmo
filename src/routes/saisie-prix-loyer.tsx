@@ -9,29 +9,29 @@ const TIMEOUT_MS = 10_000;
 
 type Status = "idle" | "loading" | "success" | "error";
 
-export const Route = createFileRoute("/saisie-terrain")({
+export const Route = createFileRoute("/saisie-prix-loyer")({
   head: () => ({
     meta: [
-      { title: "Saisie Terrain — YoungImmo Dakar" },
+      { title: "Saisie Prix Loyer — YoungImmo Dakar" },
       {
         name: "description",
         content:
-          "Outil interne de saisie terrain pour l'équipe de vérification YoungImmo. Génère une fiche logement depuis une annonce vérifiée sur place.",
+          "Outil interne de saisie des prix de loyer pour l'équipe de vérification YoungImmo. Génère une fiche logement depuis une annonce vérifiée sur place.",
       },
-      { property: "og:title", content: "Saisie Terrain — YoungImmo Dakar" },
+      { property: "og:title", content: "Saisie Prix Loyer — YoungImmo Dakar" },
       {
         property: "og:description",
         content:
-          "Outil interne de saisie terrain pour l'équipe de vérification YoungImmo.",
+          "Outil interne de saisie des prix de loyer pour l'équipe de vérification YoungImmo.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: SaisieTerrainPage,
+  component: SaisiePrixLoyerPage,
 });
 
-function SaisieTerrainPage() {
+function SaisiePrixLoyerPage() {
   const [donnees, setDonnees] = useState("");
   const [question, setQuestion] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -85,7 +85,7 @@ function SaisieTerrainPage() {
       <YiHeader />
       <main className="pt-24 pb-16 max-w-3xl mx-auto px-4 sm:px-6">
         <h1 className="text-3xl sm:text-4xl font-extrabold text-primary">
-          🔍 Saisie Terrain
+          🔍 Saisie Prix Loyer
         </h1>
         <p className="mt-2 text-muted-foreground">
           Équipe de vérification YoungImmo — Données en temps réel
