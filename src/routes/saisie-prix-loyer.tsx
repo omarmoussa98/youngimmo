@@ -84,9 +84,7 @@ function SaisiePrixLoyerPage() {
     <div className="min-h-screen bg-background">
       <YiHeader />
       <main className="pt-24 pb-16 max-w-3xl mx-auto px-4 sm:px-6">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-primary">
-          🔍 Saisie Prix Loyer
-        </h1>
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-primary">🔍 Saisie Prix Loyer</h1>
         <p className="mt-2 text-muted-foreground">
           Équipe de vérification YoungImmo — Données en temps réel
         </p>
@@ -96,10 +94,7 @@ function SaisiePrixLoyerPage() {
           className="mt-8 bg-card rounded-2xl p-6 sm:p-8 shadow-md border border-border/60 space-y-5"
         >
           <div>
-            <label
-              htmlFor="donnees"
-              className="block text-sm font-semibold text-foreground mb-1"
-            >
+            <label htmlFor="donnees" className="block text-sm font-semibold text-foreground mb-1">
               Annonce vérifiée sur place
             </label>
             <textarea
@@ -114,10 +109,7 @@ function SaisiePrixLoyerPage() {
           </div>
 
           <div>
-            <label
-              htmlFor="question"
-              className="block text-sm font-semibold text-foreground mb-1"
-            >
+            <label htmlFor="question" className="block text-sm font-semibold text-foreground mb-1">
               Votre question
             </label>
             <input
@@ -158,9 +150,7 @@ function SaisiePrixLoyerPage() {
 
         {status === "success" && resultat && (
           <div className="mt-6 fade-up">
-            <h2 className="text-lg font-bold text-foreground mb-2">
-              Fiche logement générée
-            </h2>
+            <h2 className="text-lg font-bold text-foreground mb-2">Fiche logement générée</h2>
             <div
               className="rounded-2xl border border-border/60 bg-white p-6 text-foreground shadow-md"
               style={{ whiteSpace: "pre-line", lineHeight: 1.6 }}

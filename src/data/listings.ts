@@ -79,3 +79,40 @@ export const listings: Listing[] = [
 ];
 
 export const formatFcfa = (n: number) => n.toLocaleString("fr-FR") + " FCFA";
+
+// Fourchette de marché par quartier, déduite des loyers des annonces elles-mêmes :
+// moyenne du quartier ±10 %. Un quartier qui n'a qu'une annonce reste donc "dans
+// la fourchette" au lieu d'être classé arbitrairement.
+const TOLERANCE = 0.1;
+
+export type PriceRange = { min: number; max: number; moyenne: number };
+
+export const quartierPriceRanges = (() => {
+  const loyersParQuartier = new Map<Listing["quartier"], number[]>();
+  for (const l of listings) {
+    const loyers = loyersParQuartier.get(l.quartier) ?? [];
+    loyers.push(l.loyer);
+    loyersParQuartier.set(l.quartier, loyers);
+  }
+
+  const ranges = {} as Record<Listing["quartier"], PriceRange>;
+  for (const [quartier, loyers] of loyersParQuartier) {
+    const moyenne = loyers.reduce((total, loyer) => total + loyer, 0) / loyers.length;
+    ranges[quartier] = {
+      moyenne,
+      min: Math.round(moyenne * (1 - TOLERANCE)),
+      max: Math.round(moyenne * (1 + TOLERANCE)),
+    };
+  }
+  return ranges;
+})();
+
+export type PriceLevel = "bon" | "normal" | "eleve";
+
+export const getPriceLevel = (l: Listing): PriceLevel => {
+  const range = quartierPriceRanges[l.quartier];
+  if (!range) return "normal";
+  if (l.loyer < range.min) return "bon";
+  if (l.loyer > range.max) return "eleve";
+  return "normal";
+};

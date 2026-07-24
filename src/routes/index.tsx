@@ -36,12 +36,10 @@ function Home() {
             🇸🇳 Dakar · Étudiants
           </div>
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground max-w-3xl mx-auto">
-            Trouve ton logement vérifié{" "}
-            <span className="text-primary">près du campus</span>
+            Trouve ton logement vérifié <span className="text-primary">près du campus</span>
           </h1>
           <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Annonces vérifiées sur le terrain. Prix affichés. Proprio direct.
-            Zéro commission.
+            Annonces vérifiées sur le terrain. Prix affichés. Proprio direct. Zéro commission.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
@@ -87,8 +85,8 @@ function Home() {
               </div>
               <div className="min-w-0">
                 <p className="text-lg text-foreground italic leading-relaxed">
-                  « J'ai trouvé mon studio à Fann en 2 jours grâce à YoungImmo.
-                  Plus jamais les groupes WhatsApp ! »
+                  « J'ai trouvé mon studio à Fann en 2 jours grâce à YoungImmo. Plus jamais les
+                  groupes WhatsApp ! »
                 </p>
                 <p className="mt-3 text-sm font-semibold text-muted-foreground">
                   — Fatou, 24 ans, Master 1 UCAD
@@ -100,9 +98,7 @@ function Home() {
 
         {/* Comment ça marche */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
-          <h2 className="text-3xl font-bold text-center text-foreground">
-            Comment ça marche ?
-          </h2>
+          <h2 className="text-3xl font-bold text-center text-foreground">Comment ça marche ?</h2>
           <div className="mt-10 grid gap-8 md:grid-cols-3 relative">
             {[
               { n: 1, icon: Search, title: "Tu cherches" },
@@ -116,9 +112,7 @@ function Home() {
                     {step.n}
                   </span>
                 </div>
-                <h3 className="mt-4 font-semibold text-lg text-foreground">
-                  {step.title}
-                </h3>
+                <h3 className="mt-4 font-semibold text-lg text-foreground">{step.title}</h3>
               </div>
             ))}
           </div>

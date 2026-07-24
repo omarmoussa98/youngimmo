@@ -35,9 +35,7 @@ function ContactPage() {
         <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground">
           Une question ? Un partenariat ? Écris-nous 💬
         </h1>
-        <p className="mt-2 text-muted-foreground">
-          On répond en moins de 24h, promis.
-        </p>
+        <p className="mt-2 text-muted-foreground">On répond en moins de 24h, promis.</p>
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
           <form
@@ -48,7 +46,13 @@ function ContactPage() {
             className="bg-card rounded-2xl p-6 sm:p-8 shadow-md border border-border/60 space-y-4"
           >
             <Field label="Nom complet" name="nom" placeholder="Ex : Fatou Diop" required />
-            <Field label="E-mail" name="email" type="email" placeholder="ton.email@exemple.sn" required />
+            <Field
+              label="E-mail"
+              name="email"
+              type="email"
+              placeholder="ton.email@exemple.sn"
+              required
+            />
             <Field label="Téléphone" name="tel" type="tel" placeholder="77 XXX XX XX" />
             <div>
               <label className="block text-sm font-semibold text-foreground mb-1">Message</label>
@@ -91,8 +95,8 @@ function ContactPage() {
         </div>
 
         <p className="mt-10 text-center text-xs text-muted-foreground">
-          YoungImmo est un projet étudiant du cours GET409. Les données sont
-          fictives à des fins de démonstration.
+          YoungImmo est un projet étudiant du cours GET409. Les données sont fictives à des fins de
+          démonstration.
         </p>
       </main>
       <YiFooter />
@@ -145,7 +149,9 @@ function InfoRow({
         {icon}
       </span>
       <div className="min-w-0">
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{title}</p>
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+          {title}
+        </p>
         <p className="text-foreground">{children}</p>
       </div>
     </div>

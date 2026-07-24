@@ -2,7 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { YiHeader } from "@/components/YiHeader";
 import { YiFooter } from "@/components/YiFooter";
-import { listings, formatFcfa, type Listing } from "@/data/listings";
+import {
+  listings,
+  formatFcfa,
+  getPriceLevel,
+  quartierPriceRanges,
+  type Listing,
+  type PriceLevel,
+} from "@/data/listings";
 import { AiAssistant } from "@/components/AiAssistant";
 
 export const Route = createFileRoute("/logements")({
@@ -95,7 +102,6 @@ function LogementsPage() {
         </div>
 
         <AiAssistant />
-
       </main>
       <YiFooter />
     </div>
@@ -118,6 +124,7 @@ function ListingCard({ l }: { l: Listing }) {
           {formatFcfa(l.loyer)}
           <span className="text-sm font-medium text-muted-foreground">/mois</span>
         </p>
+        <PriceTag l={l} />
         <div className="mt-5 pt-4 border-t border-border/60">
           {l.disponible && l.whatsapp ? (
             <a
@@ -139,6 +146,27 @@ function ListingCard({ l }: { l: Listing }) {
         </div>
       </div>
     </article>
+  );
+}
+
+const priceTags: Record<PriceLevel, { label: string; className: string }> = {
+  bon: { label: "Bon prix", className: "bg-success/10 text-success" },
+  normal: { label: "Prix normal", className: "bg-muted text-muted-foreground" },
+  eleve: { label: "Au-dessus du marché", className: "bg-accent/15 text-accent" },
+};
+
+function PriceTag({ l }: { l: Listing }) {
+  const range = quartierPriceRanges[l.quartier];
+  if (!range) return null;
+
+  const { label, className } = priceTags[getPriceLevel(l)];
+  return (
+    <span
+      title={`Fourchette ${l.quartier} : ${formatFcfa(range.min)} – ${formatFcfa(range.max)}`}
+      className={`mt-2 self-start inline-flex items-center rounded-full text-xs font-semibold px-2.5 py-1 ${className}`}
+    >
+      {label}
+    </span>
   );
 }
 

@@ -86,14 +86,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "YoungImmo — Ton appart vérifié près du campus à Dakar" },
       {
         property: "og:description",
-        content: "Trouve un logement étudiant vérifié à Dakar en 3 clics. Annonces vérifiées sur le terrain, prix affichés, contact proprio direct. Zéro commission.",
+        content:
+          "Trouve un logement étudiant vérifié à Dakar en 3 clics. Annonces vérifiées sur le terrain, prix affichés, contact proprio direct. Zéro commission.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "YoungImmo — Ton appart vérifié près du campus à Dakar" },
-      { name: "twitter:description", content: "Trouve un logement étudiant vérifié à Dakar en 3 clics. Annonces vérifiées sur le terrain, prix affichés, contact proprio direct. Zéro commission." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/439adbe9-13ae-46ae-827c-b9b5c529431f/id-preview-22934d56--45dada4a-ca9a-4cdb-b841-ccd27c7d022c.lovable.app-1784666362144.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/439adbe9-13ae-46ae-827c-b9b5c529431f/id-preview-22934d56--45dada4a-ca9a-4cdb-b841-ccd27c7d022c.lovable.app-1784666362144.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Trouve un logement étudiant vérifié à Dakar en 3 clics. Annonces vérifiées sur le terrain, prix affichés, contact proprio direct. Zéro commission.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/439adbe9-13ae-46ae-827c-b9b5c529431f/id-preview-22934d56--45dada4a-ca9a-4cdb-b841-ccd27c7d022c.lovable.app-1784666362144.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/439adbe9-13ae-46ae-827c-b9b5c529431f/id-preview-22934d56--45dada4a-ca9a-4cdb-b841-ccd27c7d022c.lovable.app-1784666362144.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

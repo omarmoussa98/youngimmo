@@ -44,9 +44,7 @@ export function YiHeader() {
         <Link to="/" className="flex min-w-0 items-center gap-2" onClick={close}>
           <span className="text-2xl shrink-0">🔑</span>
           <div className="min-w-0">
-            <div className="truncate font-bold text-lg leading-none text-foreground">
-              YoungImmo
-            </div>
+            <div className="truncate font-bold text-lg leading-none text-foreground">YoungImmo</div>
             <div className="truncate text-[10px] text-muted-foreground leading-tight mt-0.5">
               Ton appart, pas d'arnaque.
             </div>
@@ -54,7 +52,12 @@ export function YiHeader() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          <Link to="/" className={desktopLink} activeOptions={{ exact: true }} activeProps={desktopActive}>
+          <Link
+            to="/"
+            className={desktopLink}
+            activeOptions={{ exact: true }}
+            activeProps={desktopActive}
+          >
             Accueil
           </Link>
           <Link to="/logements" className={desktopLink} activeProps={desktopActive}>
@@ -76,7 +79,16 @@ export function YiHeader() {
           aria-expanded={open}
           aria-controls="mobile-nav"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             {open ? (
               <>
                 <path d="M6 6l12 12" />
@@ -107,17 +119,30 @@ export function YiHeader() {
       <div
         id="mobile-nav"
         className={`md:hidden fixed inset-x-0 top-16 z-50 origin-top border-t border-border/60 bg-background shadow-xl transition-all duration-200 ${
-          open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"
+          open
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-2 pointer-events-none"
         }`}
       >
         <nav className="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-1">
-          <Link to="/" className={mobileLink} activeOptions={{ exact: true }} activeProps={mobileActive} onClick={close}>
+          <Link
+            to="/"
+            className={mobileLink}
+            activeOptions={{ exact: true }}
+            activeProps={mobileActive}
+            onClick={close}
+          >
             <span aria-hidden>🏠</span> Accueil
           </Link>
           <Link to="/logements" className={mobileLink} activeProps={mobileActive} onClick={close}>
             <span aria-hidden>🔑</span> Logements
           </Link>
-          <Link to="/saisie-prix-loyer" className={mobileLink} activeProps={mobileActive} onClick={close}>
+          <Link
+            to="/saisie-prix-loyer"
+            className={mobileLink}
+            activeProps={mobileActive}
+            onClick={close}
+          >
             <span aria-hidden>🔍</span> Saisie Prix Loyer
           </Link>
           <Link to="/contact" className={mobileLink} activeProps={mobileActive} onClick={close}>
