@@ -2,10 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { YiHeader } from "@/components/YiHeader";
 import { YiFooter } from "@/components/YiFooter";
-
-const DIFY_URL = "https://api.dify.ai/v1/workflows/run";
-const DIFY_TOKEN = "app-aXRj5fB3wYpDnKgN52YbauGB";
-const TIMEOUT_MS = 10_000;
+import { appelerDify } from "@/lib/dify";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -46,36 +43,16 @@ function SaisiePrixLoyerPage() {
     setErreur("");
     setResultat("");
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort("timeout"), TIMEOUT_MS);
+    const resultat = await appelerDify(
+      { query: question, prix_loyer: donnees },
+      { user: "equipe-terrain" },
+    );
 
-    try {
-      const res = await fetch(DIFY_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${DIFY_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          inputs: { query: question, prix_loyer: donnees },
-          response_mode: "blocking",
-          user: "equipe-terrain",
-        }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-
-      if (!res.ok) throw new Error("http_" + res.status);
-      const json = await res.json();
-      const text = json?.data?.outputs?.text || json?.data?.outputs || json?.data?.answer || "";
-      setResultat(typeof text === "string" ? text : JSON.stringify(text));
+    if (resultat.ok) {
+      setResultat(resultat.texte);
       setStatus("success");
-    } catch (err: unknown) {
-      clearTimeout(timeoutId);
-      const isAbort =
-        (err instanceof DOMException && err.name === "AbortError") ||
-        (err as { name?: string })?.name === "AbortError";
-      setErreur(isAbort ? "La requête a pris trop de temps — réessaye." : "Erreur — réessayer");
+    } else {
+      setErreur(resultat.erreur);
       setStatus("error");
     }
   }

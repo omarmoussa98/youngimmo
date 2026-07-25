@@ -13,12 +13,11 @@ import {
   type PriceLevel,
 } from "@/data/listings";
 import { AiAssistant } from "@/components/AiAssistant";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { AlerteSection, BanniereAlertes } from "@/components/AlerteLogement";
+import { AideNegociation } from "@/components/AideNegociation";
+import { useAlertes } from "@/hooks/use-alertes";
+import { lienWhatsappRecap, trouverAlerte } from "@/lib/alertes";
 
 export const Route = createFileRoute("/logements")({
   head: () => ({
@@ -47,6 +46,7 @@ const filters = ["Tous", ...quartiers, PRIX_FILTER];
 function LogementsPage() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<string>("Tous");
+  const { alertes, chargees, ajouter, supprimer } = useAlertes();
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -61,6 +61,21 @@ function LogementsPage() {
     });
   }, [query, filter]);
 
+  // Les annonces correspondant à une alerte remontent en tête. Array.prototype.sort
+  // étant stable, l'ordre d'origine est conservé à l'intérieur de chaque groupe.
+  const { affichees, correspondances } = useMemo(() => {
+    if (alertes.length === 0) {
+      return { affichees: results, correspondances: new Set<number>() };
+    }
+    const correspondances = new Set(
+      results.filter((l) => trouverAlerte(l, alertes) !== null).map((l) => l.id),
+    );
+    const affichees = [...results].sort(
+      (a, b) => Number(correspondances.has(b.id)) - Number(correspondances.has(a.id)),
+    );
+    return { affichees, correspondances };
+  }, [results, alertes]);
+
   return (
     <div className="min-h-screen bg-background">
       <YiHeader />
@@ -71,6 +86,9 @@ function LogementsPage() {
         <p className="mt-2 text-muted-foreground">
           Tous visités sur le terrain par notre équipe étudiante.
         </p>
+
+        <AlerteSection alertes={alertes} onAjouter={ajouter} onSupprimer={supprimer} />
+        {chargees && <BanniereAlertes nombre={correspondances.size} />}
 
         <div className="mt-6">
           <input
@@ -100,10 +118,10 @@ function LogementsPage() {
 
         <TooltipProvider delayDuration={150}>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {results.map((l) => (
-              <ListingCard key={l.id} l={l} />
+            {affichees.map((l) => (
+              <ListingCard key={l.id} l={l} correspond={correspondances.has(l.id)} />
             ))}
-            {results.length === 0 && (
+            {affichees.length === 0 && (
               <p className="text-muted-foreground col-span-full">
                 Aucun logement ne correspond à ta recherche.
               </p>
@@ -118,10 +136,19 @@ function LogementsPage() {
   );
 }
 
-function ListingCard({ l }: { l: Listing }) {
+function ListingCard({ l, correspond }: { l: Listing; correspond: boolean }) {
   return (
-    <article className="bg-card rounded-2xl shadow-md hover:shadow-xl transition-shadow border border-border/60 overflow-hidden flex flex-col fade-up">
+    <article
+      className={`bg-card rounded-2xl shadow-md hover:shadow-xl transition-shadow overflow-hidden flex flex-col fade-up border ${
+        correspond ? "border-primary ring-2 ring-primary/30" : "border-border/60"
+      }`}
+    >
       <div className="p-5 flex-1 flex flex-col">
+        {correspond && (
+          <p className="mb-3 inline-flex items-center gap-1.5 self-start rounded-full bg-primary text-primary-foreground text-xs font-semibold px-2.5 py-1">
+            🔔 Correspond à ton alerte
+          </p>
+        )}
         <div className="flex items-center justify-between gap-2">
           <span className="inline-flex items-center rounded-full bg-primary/10 text-primary text-xs font-semibold px-2.5 py-1">
             {l.typeLabel}
@@ -156,6 +183,19 @@ function ListingCard({ l }: { l: Listing }) {
               Actuellement loué
             </button>
           )}
+
+          {correspond && (
+            <a
+              href={lienWhatsappRecap(l)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-hover mt-2 w-full inline-flex items-center justify-center gap-2 rounded-xl border border-primary text-primary px-4 py-2.5 font-semibold hover:bg-primary/10"
+            >
+              💬 Recevoir sur WhatsApp
+            </a>
+          )}
+
+          <AideNegociation l={l} />
         </div>
       </div>
     </article>

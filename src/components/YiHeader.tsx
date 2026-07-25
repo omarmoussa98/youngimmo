@@ -44,7 +44,9 @@ export function YiHeader() {
         <Link to="/" className="flex min-w-0 items-center gap-2" onClick={close}>
           <span className="text-2xl shrink-0">🔑</span>
           <div className="min-w-0">
-            <div className="truncate font-bold text-lg leading-none text-foreground">YoungImmo</div>
+            <div className="truncate font-display font-semibold text-xl leading-none text-foreground">
+              YoungImmo
+            </div>
             <div className="truncate text-[10px] text-muted-foreground leading-tight mt-0.5">
               Ton appart, pas d'arnaque.
             </div>
@@ -62,6 +64,9 @@ export function YiHeader() {
           </Link>
           <Link to="/logements" className={desktopLink} activeProps={desktopActive}>
             Logements
+          </Link>
+          <Link to="/carte" className={desktopLink} activeProps={desktopActive}>
+            Carte
           </Link>
           <Link to="/saisie-prix-loyer" className={desktopLink} activeProps={desktopActive}>
             Saisie Prix Loyer
@@ -136,6 +141,9 @@ export function YiHeader() {
           </Link>
           <Link to="/logements" className={mobileLink} activeProps={mobileActive} onClick={close}>
             <span aria-hidden>🔑</span> Logements
+          </Link>
+          <Link to="/carte" className={mobileLink} activeProps={mobileActive} onClick={close}>
+            <span aria-hidden>🗺️</span> Carte
           </Link>
           <Link
             to="/saisie-prix-loyer"

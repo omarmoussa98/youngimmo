@@ -30,30 +30,42 @@ function Home() {
     <div className="min-h-screen bg-background">
       <YiHeader />
       <main className="pt-16">
-        {/* Hero */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20 text-center fade-up">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary text-xs font-semibold px-3 py-1 mb-6">
-            🇸🇳 Dakar · Étudiants
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground max-w-3xl mx-auto">
-            Trouve ton logement vérifié <span className="text-primary">près du campus</span>
-          </h1>
-          <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Annonces vérifiées sur le terrain. Prix affichés. Proprio direct. Zéro commission.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              to="/logements"
-              className="btn-hover inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground px-6 py-3 font-semibold shadow-lg shadow-primary/20 hover:scale-[1.03]"
-            >
-              🏠 Voir les logements dispo
-            </Link>
-            <a
-              href="#assistant"
-              className="btn-hover inline-flex items-center justify-center gap-2 rounded-xl bg-accent text-accent-foreground px-6 py-3 font-semibold shadow-lg shadow-accent/30 hover:scale-[1.03]"
-            >
-              🤖 Demande à l'assistant IA
-            </a>
+        {/* Hero : visuel encadré, à la manière d'une couverture de magazine.
+            Le fond empile deux images : une photo /hero.jpg si elle est déposée
+            dans public/, sinon la silhouette SVG livrée par défaut. */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-16">
+          <div className="relative overflow-hidden rounded-2xl shadow-xl fade-up">
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: 'url("/hero.jpg"), url("/hero-immo.svg")' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/25 to-black/60" />
+
+            <div className="relative px-6 py-24 sm:py-32 lg:py-40 text-center">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/15 text-white text-xs font-semibold px-3 py-1 mb-7 backdrop-blur-sm ring-1 ring-white/25">
+                🇸🇳 Dakar · Étudiants
+              </div>
+              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-semibold leading-[1.08] tracking-tight text-white max-w-4xl mx-auto drop-shadow-sm">
+                Ton appart vérifié, à deux pas du campus
+              </h1>
+              <p className="mt-6 text-base sm:text-lg text-white/90 max-w-2xl mx-auto">
+                Annonces vérifiées sur le terrain. Prix affichés. Proprio direct. Zéro commission.
+              </p>
+              <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  to="/logements"
+                  className="btn-hover inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground px-7 py-3.5 font-semibold shadow-lg shadow-black/20 hover:scale-[1.03]"
+                >
+                  🏠 Voir les logements dispo
+                </Link>
+                <a
+                  href="#assistant"
+                  className="btn-hover inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 text-white ring-1 ring-white/40 px-7 py-3.5 font-semibold backdrop-blur-sm hover:bg-white/20"
+                >
+                  🤖 Demande à l'assistant IA
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -84,7 +96,7 @@ function Home() {
                 F
               </div>
               <div className="min-w-0">
-                <p className="text-lg text-foreground italic leading-relaxed">
+                <p className="font-display text-xl text-foreground italic leading-relaxed">
                   « J'ai trouvé mon studio à Fann en 2 jours grâce à YoungImmo. Plus jamais les
                   groupes WhatsApp ! »
                 </p>
@@ -98,7 +110,9 @@ function Home() {
 
         {/* Comment ça marche */}
         <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
-          <h2 className="text-3xl font-bold text-center text-foreground">Comment ça marche ?</h2>
+          <h2 className="font-display text-3xl sm:text-4xl font-semibold text-center text-foreground">
+            Comment ça marche ?
+          </h2>
           <div className="mt-10 grid gap-8 md:grid-cols-3 relative">
             {[
               { n: 1, icon: Search, title: "Tu cherches" },

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SaisiePrixLoyerRouteImport } from './routes/saisie-prix-loyer'
 import { Route as LogementsRouteImport } from './routes/logements'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CarteRouteImport } from './routes/carte'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SaisiePrixLoyerRoute = SaisiePrixLoyerRouteImport.update({
@@ -29,6 +30,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CarteRoute = CarteRouteImport.update({
+  id: '/carte',
+  path: '/carte',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/carte': typeof CarteRoute
   '/contact': typeof ContactRoute
   '/logements': typeof LogementsRoute
   '/saisie-prix-loyer': typeof SaisiePrixLoyerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/carte': typeof CarteRoute
   '/contact': typeof ContactRoute
   '/logements': typeof LogementsRoute
   '/saisie-prix-loyer': typeof SaisiePrixLoyerRoute
@@ -50,20 +58,28 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/carte': typeof CarteRoute
   '/contact': typeof ContactRoute
   '/logements': typeof LogementsRoute
   '/saisie-prix-loyer': typeof SaisiePrixLoyerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact' | '/logements' | '/saisie-prix-loyer'
+  fullPaths: '/' | '/carte' | '/contact' | '/logements' | '/saisie-prix-loyer'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/logements' | '/saisie-prix-loyer'
-  id: '__root__' | '/' | '/contact' | '/logements' | '/saisie-prix-loyer'
+  to: '/' | '/carte' | '/contact' | '/logements' | '/saisie-prix-loyer'
+  id:
+    | '__root__'
+    | '/'
+    | '/carte'
+    | '/contact'
+    | '/logements'
+    | '/saisie-prix-loyer'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CarteRoute: typeof CarteRoute
   ContactRoute: typeof ContactRoute
   LogementsRoute: typeof LogementsRoute
   SaisiePrixLoyerRoute: typeof SaisiePrixLoyerRoute
@@ -92,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/carte': {
+      id: '/carte'
+      path: '/carte'
+      fullPath: '/carte'
+      preLoaderRoute: typeof CarteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +127,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CarteRoute: CarteRoute,
   ContactRoute: ContactRoute,
   LogementsRoute: LogementsRoute,
   SaisiePrixLoyerRoute: SaisiePrixLoyerRoute,

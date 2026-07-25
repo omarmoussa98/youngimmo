@@ -1,8 +1,5 @@
 import { useState } from "react";
-
-const DIFY_URL = "https://api.dify.ai/v1/workflows/run";
-const DIFY_TOKEN = "app-aXRj5fB3wYpDnKgN52YbauGB";
-const TIMEOUT_MS = 10_000;
+import { appelerDify } from "@/lib/dify";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -20,45 +17,13 @@ export function AiAssistant() {
     setError("");
     setResult("");
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort("timeout"), TIMEOUT_MS);
+    const resultat = await appelerDify({ query });
 
-    try {
-      const res = await fetch(DIFY_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${DIFY_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          inputs: { query },
-          response_mode: "blocking",
-          user: "youngimmo-" + Date.now(),
-        }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-
-      if (!res.ok) throw new Error("http_" + res.status);
-      const json = await res.json();
-      const rawOutput = json?.data?.outputs;
-      const text =
-        rawOutput?.text ||
-        (typeof rawOutput === "string" ? rawOutput : "") ||
-        json?.data?.answer ||
-        "Aucune réponse reçue.";
-      setResult(text);
+    if (resultat.ok) {
+      setResult(resultat.texte);
       setStatus("success");
-    } catch (err: unknown) {
-      clearTimeout(timeoutId);
-      const isAbort =
-        (err instanceof DOMException && err.name === "AbortError") ||
-        (err as { name?: string })?.name === "AbortError";
-      if (isAbort) {
-        setError("La réponse prend trop de temps — réessaye dans quelques secondes");
-      } else {
-        setError("Service temporairement indisponible — vérifie ta connexion");
-      }
+    } else {
+      setError(resultat.erreur);
       setStatus("error");
     }
   }

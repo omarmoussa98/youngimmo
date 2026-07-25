@@ -1,6 +1,8 @@
 export type Listing = {
   id: number;
-  type: "Studio" | "Chambre" | "Coloc";
+  // "Appartement" est proposé dans les alertes logement : le type existe donc ici
+  // même si aucune annonce n'en propose encore.
+  type: "Studio" | "Chambre" | "Coloc" | "Appartement";
   typeLabel: string;
   quartier:
     | "Fann"
