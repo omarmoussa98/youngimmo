@@ -1,7 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-export function YiHeader() {
+/**
+ * `overlay` : le header se pose par-dessus le visuel plein écran de l'accueil
+ * (fond transparent, texte blanc) et bascule en barre opaque dès que la page
+ * défile, pour rester lisible sur le fond ivoire.
+ */
+export function YiHeader({ overlay = false }: { overlay?: boolean } = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -19,10 +24,16 @@ export function YiHeader() {
     };
   }, [open]);
 
-  const desktopLink =
-    "px-3 py-2 rounded-md text-sm font-medium text-foreground/80 hover:text-primary transition-colors";
+  // Tant que le visuel est sous le header, on inverse les couleurs du texte.
+  const clair = overlay && !scrolled && !open;
+
+  const desktopLink = clair
+    ? "px-3 py-2 rounded-md text-sm font-medium text-white/85 hover:text-white transition-colors"
+    : "px-3 py-2 rounded-md text-sm font-medium text-foreground/80 hover:text-primary transition-colors";
   const desktopActive = {
-    className: "px-3 py-2 rounded-md text-sm font-semibold text-primary",
+    className: clair
+      ? "px-3 py-2 rounded-md text-sm font-semibold text-white"
+      : "px-3 py-2 rounded-md text-sm font-semibold text-primary",
   };
 
   const mobileLink =
@@ -36,18 +47,28 @@ export function YiHeader() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 bg-background transition-shadow ${
-        scrolled ? "shadow-md" : "shadow-sm"
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+        clair
+          ? "bg-gradient-to-b from-black/45 to-transparent"
+          : `bg-background ${scrolled ? "shadow-md" : "shadow-sm"}`
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:flex md:justify-between">
         <Link to="/" className="flex min-w-0 items-center gap-2" onClick={close}>
           <span className="text-2xl shrink-0">🔑</span>
           <div className="min-w-0">
-            <div className="truncate font-display font-semibold text-xl leading-none text-foreground">
+            <div
+              className={`truncate font-display font-semibold text-xl leading-none ${
+                clair ? "text-white" : "text-foreground"
+              }`}
+            >
               YoungImmo
             </div>
-            <div className="truncate text-[10px] text-muted-foreground leading-tight mt-0.5">
+            <div
+              className={`truncate text-[10px] leading-tight mt-0.5 ${
+                clair ? "text-white/75" : "text-muted-foreground"
+              }`}
+            >
               Ton appart, pas d'arnaque.
             </div>
           </div>
@@ -78,7 +99,11 @@ export function YiHeader() {
 
         <button
           type="button"
-          className="md:hidden shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-lg border border-border/60 bg-background hover:bg-muted transition-colors"
+          className={`md:hidden shrink-0 inline-flex items-center justify-center w-11 h-11 rounded-lg border transition-colors ${
+            clair
+              ? "border-white/40 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
+              : "border-border/60 bg-background hover:bg-muted"
+          }`}
           onClick={() => setOpen((o) => !o)}
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={open}

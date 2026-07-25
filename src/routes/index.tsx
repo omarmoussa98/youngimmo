@@ -28,68 +28,66 @@ export const Route = createFileRoute("/")({
 function Home() {
   return (
     <div className="min-h-screen bg-background">
-      <YiHeader />
-      <main className="pt-16">
-        {/* Hero : visuel encadré, à la manière d'une couverture de magazine.
-            Le fond empile deux images : une photo /hero.jpg si elle est déposée
-            dans public/, sinon la silhouette SVG livrée par défaut. */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-16">
-          <div className="relative overflow-hidden rounded-2xl shadow-xl fade-up">
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: 'url("/hero.jpg"), url("/hero-immo.svg")' }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/25 to-black/60" />
+      <YiHeader overlay />
+      <main>
+        {/* Hero plein écran : le visuel court d'un bord à l'autre et passe sous
+            l'en-tête transparent. Le fond empile deux images — une photo
+            /hero.jpg si elle est déposée dans public/, sinon le SVG livré. */}
+        <section className="relative min-h-[92svh] flex items-center overflow-hidden">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: 'url("/hero.jpg"), url("/hero-immo.svg")' }}
+          />
+          {/* Fondu vers le fond ivoire : le visuel se dissout dans la page. */}
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background" />
 
-            <div className="relative px-6 py-24 sm:py-32 lg:py-40 text-center">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/15 text-white text-xs font-semibold px-3 py-1 mb-7 backdrop-blur-sm ring-1 ring-white/25">
-                🇸🇳 Dakar · Étudiants
-              </div>
-              <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-semibold leading-[1.08] tracking-tight text-white max-w-4xl mx-auto drop-shadow-sm">
-                Ton appart vérifié, à deux pas du campus
-              </h1>
-              <p className="mt-6 text-base sm:text-lg text-white/90 max-w-2xl mx-auto">
-                Annonces vérifiées sur le terrain. Prix affichés. Proprio direct. Zéro commission.
-              </p>
-              <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
-                <Link
-                  to="/logements"
-                  className="btn-hover inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground px-7 py-3.5 font-semibold shadow-lg shadow-black/20 hover:scale-[1.03]"
-                >
-                  🏠 Voir les logements dispo
-                </Link>
-                <a
-                  href="#assistant"
-                  className="btn-hover inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 text-white ring-1 ring-white/40 px-7 py-3.5 font-semibold backdrop-blur-sm hover:bg-white/20"
-                >
-                  🤖 Demande à l'assistant IA
-                </a>
-              </div>
+          <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 pt-28 pb-24 text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/15 text-white text-xs font-semibold px-3.5 py-1.5 mb-7 backdrop-blur-sm ring-1 ring-white/25 fade-up">
+              🇸🇳 Dakar · Étudiants
             </div>
-          </div>
-        </section>
+            <h1 className="font-display text-[2.6rem] leading-[1.05] sm:text-6xl lg:text-7xl font-semibold tracking-tight text-white max-w-4xl mx-auto fade-up">
+              Ton appart vérifié, à deux pas du campus
+            </h1>
+            <p className="mt-6 text-base sm:text-xl text-white/90 max-w-2xl mx-auto fade-up">
+              Annonces vérifiées sur le terrain. Prix affichés. Proprio direct. Zéro commission.
+            </p>
 
-        {/* Stats */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              { icon: "🔍", label: "100% des annonces vérifiées sur place" },
-              { icon: "💸", label: "0 FCFA de commission pour l'étudiant" },
-              { icon: "⚡", label: "Contact proprio en moins de 30 secondes" },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="bg-card rounded-2xl p-6 shadow-sm border border-border/60 fade-up"
+            <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center fade-up">
+              <Link
+                to="/logements"
+                className="btn-hover inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground px-7 py-3.5 font-semibold shadow-xl shadow-black/30 hover:scale-[1.03]"
               >
-                <div className="text-3xl">{s.icon}</div>
-                <p className="mt-3 font-semibold text-foreground">{s.label}</p>
-              </div>
-            ))}
+                🏠 Voir les logements dispo
+              </Link>
+              <a
+                href="#assistant"
+                className="btn-hover inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 text-white ring-1 ring-white/40 px-7 py-3.5 font-semibold backdrop-blur-sm hover:bg-white/20"
+              >
+                🤖 Demande à l'assistant IA
+              </a>
+            </div>
+
+            {/* Chiffres clés directement sur le visuel */}
+            <dl className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto fade-up">
+              {[
+                { valeur: "100%", label: "des annonces vérifiées sur place" },
+                { valeur: "0 FCFA", label: "de commission pour l'étudiant" },
+                { valeur: "30 s", label: "pour joindre le proprio" },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-2xl bg-white/10 ring-1 ring-white/20 backdrop-blur-md px-5 py-4"
+                >
+                  <dt className="font-display text-2xl font-semibold text-white">{s.valeur}</dt>
+                  <dd className="mt-1 text-sm text-white/80">{s.label}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </section>
 
         {/* Témoignage */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 pb-16">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-20 pb-16">
           <div className="rounded-2xl bg-primary/5 border border-primary/10 p-6 sm:p-8 fade-up">
             <div className="flex items-start gap-4">
               <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent grid place-items-center text-xl font-bold text-white">
