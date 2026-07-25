@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Map as LeafletMap } from "leaflet";
 import leafletCss from "leaflet/dist/leaflet.css?url";
 import { YiHeader } from "@/components/YiHeader";
 import { YiFooter } from "@/components/YiFooter";
-import { formatFcfa } from "@/data/listings";
+import { formatFcfa, listings } from "@/data/listings";
 import {
   mapCenter,
   moyenneExtent,
@@ -12,6 +12,10 @@ import {
   quartierStats,
   type QuartierStats,
 } from "@/data/quartiersGeo";
+import { ListingCard } from "@/components/ListingCard";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { useAlertes } from "@/hooks/use-alertes";
+import { trouverAlerte } from "@/lib/alertes";
 
 export const Route = createFileRoute("/carte")({
   head: () => ({
@@ -38,8 +42,19 @@ export const Route = createFileRoute("/carte")({
 function CartePage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
+  const annoncesRef = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState<QuartierStats | null>(null);
   const [erreur, setErreur] = useState(false);
+  const [scrollDemande, setScrollDemande] = useState(false);
+  const { alertes } = useAlertes();
+
+  // Annonces du quartier choisi : les disponibles d'abord, puis par loyer croissant.
+  const annonces = useMemo(() => {
+    if (!selected) return [];
+    return listings
+      .filter((l) => l.quartier === selected.quartier)
+      .sort((a, b) => Number(b.disponible) - Number(a.disponible) || a.loyer - b.loyer);
+  }, [selected]);
 
   useEffect(() => {
     let annule = false;
@@ -70,7 +85,10 @@ function CartePage() {
           })
             .addTo(map)
             .bindTooltip(`${stats.quartier} — ${formatFcfa(Math.round(stats.moyenne))} en moyenne`)
-            .on("click", () => setSelected(stats));
+            .on("click", () => {
+              setSelected(stats);
+              setScrollDemande(true);
+            });
         }
 
         if (quartierStats.length > 0) {
@@ -87,6 +105,17 @@ function CartePage() {
       mapRef.current = null;
     };
   }, []);
+
+  // Sur mobile, les annonces sont sous la carte : un clic sur un cercle doit y
+  // amener, sinon rien ne semble se passer. L'effet attend que la section soit
+  // rendue avant de faire défiler.
+  useEffect(() => {
+    if (!scrollDemande || !selected) return;
+    setScrollDemande(false);
+    if (window.innerWidth < 1024) {
+      annoncesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [scrollDemande, selected]);
 
   const focus = (stats: QuartierStats) => {
     setSelected(stats);
@@ -152,6 +181,32 @@ function CartePage() {
             </button>
           ))}
         </div>
+
+        {/* Les annonces du quartier choisi, directement ici : plus besoin de
+            repasser par la page Logements pour les retrouver. */}
+        <div ref={annoncesRef} className="scroll-mt-24">
+          {selected && (
+            <section className="mt-12">
+              <div className="flex flex-wrap items-baseline justify-between gap-3">
+                <h2 className="font-display text-2xl sm:text-3xl font-semibold text-foreground">
+                  {annonces.length} annonce{annonces.length > 1 ? "s" : ""} à {selected.quartier}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {selected.disponibles} encore disponible{selected.disponibles > 1 ? "s" : ""} ·
+                  loyer moyen {formatFcfa(Math.round(selected.moyenne))}
+                </p>
+              </div>
+
+              <TooltipProvider delayDuration={150}>
+                <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {annonces.map((l) => (
+                    <ListingCard key={l.id} l={l} correspond={trouverAlerte(l, alertes) !== null} />
+                  ))}
+                </div>
+              </TooltipProvider>
+            </section>
+          )}
+        </div>
       </main>
       <YiFooter />
     </div>
@@ -184,8 +239,8 @@ function DetailPanel({ stats }: { stats: QuartierStats | null }) {
     return (
       <aside className="rounded-2xl border border-border/60 bg-card p-6 shadow-md">
         <p className="text-muted-foreground">
-          Clique sur un quartier de la carte pour voir son loyer moyen et le nombre d'annonces
-          encore disponibles.
+          Clique sur un quartier de la carte pour voir son loyer moyen, ses annonces disponibles et
+          les fiches complètes, sans quitter cette page.
         </p>
       </aside>
     );
