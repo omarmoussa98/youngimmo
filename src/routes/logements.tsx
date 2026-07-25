@@ -6,11 +6,19 @@ import {
   listings,
   formatFcfa,
   getPriceLevel,
+  getTrustScore,
+  quartiers,
   quartierPriceRanges,
   type Listing,
   type PriceLevel,
 } from "@/data/listings";
 import { AiAssistant } from "@/components/AiAssistant";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Route = createFileRoute("/logements")({
   head: () => ({
@@ -33,12 +41,12 @@ export const Route = createFileRoute("/logements")({
   component: LogementsPage,
 });
 
-const filters = ["Tous", "Fann", "Point E", "Mermoz", "Moins de 50 000 FCFA"] as const;
-type Filter = (typeof filters)[number];
+const PRIX_FILTER = "Moins de 50 000 FCFA";
+const filters = ["Tous", ...quartiers, PRIX_FILTER];
 
 function LogementsPage() {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<Filter>("Tous");
+  const [filter, setFilter] = useState<string>("Tous");
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -48,7 +56,7 @@ function LogementsPage() {
         if (!hay.includes(q)) return false;
       }
       if (filter === "Tous") return true;
-      if (filter === "Moins de 50 000 FCFA") return l.loyer < 50000;
+      if (filter === PRIX_FILTER) return l.loyer < 50000;
       return l.quartier === filter || l.title === filter;
     });
   }, [query, filter]);
@@ -90,16 +98,18 @@ function LogementsPage() {
           ))}
         </div>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {results.map((l) => (
-            <ListingCard key={l.id} l={l} />
-          ))}
-          {results.length === 0 && (
-            <p className="text-muted-foreground col-span-full">
-              Aucun logement ne correspond à ta recherche.
-            </p>
-          )}
-        </div>
+        <TooltipProvider delayDuration={150}>
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {results.map((l) => (
+              <ListingCard key={l.id} l={l} />
+            ))}
+            {results.length === 0 && (
+              <p className="text-muted-foreground col-span-full">
+                Aucun logement ne correspond à ta recherche.
+              </p>
+            )}
+          </div>
+        </TooltipProvider>
 
         <AiAssistant />
       </main>
@@ -124,7 +134,10 @@ function ListingCard({ l }: { l: Listing }) {
           {formatFcfa(l.loyer)}
           <span className="text-sm font-medium text-muted-foreground">/mois</span>
         </p>
-        <PriceTag l={l} />
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <PriceTag l={l} />
+          <TrustBadge l={l} />
+        </div>
         <div className="mt-5 pt-4 border-t border-border/60">
           {l.disponible && l.whatsapp ? (
             <a
@@ -163,10 +176,49 @@ function PriceTag({ l }: { l: Listing }) {
   return (
     <span
       title={`Fourchette ${l.quartier} : ${formatFcfa(range.min)} – ${formatFcfa(range.max)}`}
-      className={`mt-2 self-start inline-flex items-center rounded-full text-xs font-semibold px-2.5 py-1 ${className}`}
+      className={`inline-flex items-center rounded-full text-xs font-semibold px-2.5 py-1 ${className}`}
     >
       {label}
     </span>
+  );
+}
+
+function trustClassName(score: number) {
+  if (score > 70) return "bg-success/10 text-success border-success/30";
+  if (score >= 50) return "bg-accent/15 text-accent border-accent/40";
+  return "bg-destructive/10 text-destructive border-destructive/30";
+}
+
+function TrustBadge({ l }: { l: Listing }) {
+  const { score, criteres } = getTrustScore(l);
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span
+          tabIndex={0}
+          className={`inline-flex items-center gap-1 rounded-full border text-xs font-semibold px-2.5 py-1 cursor-help focus:outline-none focus:ring-2 focus:ring-primary ${trustClassName(score)}`}
+        >
+          🛡️ Confiance {score}/100
+        </span>
+      </TooltipTrigger>
+      <TooltipContent className="max-w-xs bg-card text-foreground border border-border p-3 shadow-lg">
+        <p className="font-semibold">Score de confiance : {score}/100</p>
+        <ul className="mt-2 space-y-1">
+          {criteres.map((c) => (
+            <li
+              key={c.label}
+              className={`flex items-start gap-1.5 ${c.acquis ? "" : "text-muted-foreground"}`}
+            >
+              <span aria-hidden>{c.acquis ? "✅" : "❌"}</span>
+              <span>
+                {c.label} — {c.acquis ? `+${c.points}` : `0 sur ${c.points}`}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
